@@ -18,8 +18,10 @@ args = vars(ap.parse_args())
 
 # defines color limits of the basketball in RGB color code
 # then initializes list of tracked color points
-ball_color_lower = (0, 0, 0)
-ball_color_upper = (21, 25, 32)
+ball_color_lower = (95, 46, 44)
+ball_color_upper = (101, 55, 68)
+greenLower = (29, 86, 6)
+greenUpper = (64, 255, 255)
 pts = deque(maxlen=args["buffer"])
 
 # if a video path isnt supplies grab webcam reference
@@ -48,10 +50,11 @@ while True:
     frame = imutils.resize(frame, width=600)
     blurred = cv2.GaussianBlur(frame, (11, 11), 0)
     rgb = cv2.cvtColor(blurred, cv2.COLOR_BGR2RGB)
+    hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
 
     # construct a mask for the ball color
     # then perform a series of dilations and erosions to remove any small blobs left in the mask
-    mask = cv2.inRange(rgb, ball_color_lower, ball_color_upper)
+    mask = cv2.inRange(hsv, greenLower, greenUpper)
     mask = cv2.erode(mask, None, iterations=2)
     mask = cv2.dilate(mask, None, iterations=2)
 
